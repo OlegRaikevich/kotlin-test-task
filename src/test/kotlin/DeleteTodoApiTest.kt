@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.Base64
 
-class DeleteTodoApiTest {
+class DeleteTodoApiTest: BaseApiTest() {
     companion object {
         @JvmStatic
         @BeforeAll

@@ -8,7 +8,7 @@ import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
-class GetListTodoApiTest {
+class GetListTodoApiTest: BaseApiTest() {
     companion object {
         @JvmStatic
         @BeforeAll
