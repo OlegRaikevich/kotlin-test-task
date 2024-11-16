@@ -9,10 +9,10 @@ import org.hamcrest.Matchers.containsString
 class CreateTodoApiTest: BaseApiTest() {
 
     @Test
-    fun `positive test create todo`() {
+    fun `correct create todo`() {
         val requestBody = """{
-            "id": ${TestData.staticId},
-            "text": "do something",
+            "id": ${TestData.uniqId},
+            "text": "${TestData.randomString}",
             "completed": false
         }"""
 
@@ -21,14 +21,14 @@ class CreateTodoApiTest: BaseApiTest() {
             .body(requestBody)
             .post("/todos")
             .then()
-                .statusCode(201)
+            .statusCode(201)
     }
 
     @Test
     fun `duplicate id create todo`() {
         val requestBody = """{
-            "id": ${TestData.staticId},
-            "text": "do something",
+            "id": ${TestData.uniqId},
+            "text": "${TestData.randomString}",
             "completed": false
         }"""
 
@@ -45,7 +45,7 @@ class CreateTodoApiTest: BaseApiTest() {
         val randomNumber = (1..100).random()
 
         val requestBody = """{
-            "id": ${TestData.staticId},
+            "id": ${TestData.uniqId},
             "text": $randomNumber,
             "completed": false
         }"""
