@@ -49,4 +49,17 @@ object TestData {
                 .post("/todos")
         }
     }
+
+    fun createTodo() {
+        val requestBody = """{
+            "id": ${TestData.uniqId},
+            "text": "${TestData.randomString}",
+            "completed": false
+        }"""
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(requestBody)
+            .post("/todos")
+    }
 }

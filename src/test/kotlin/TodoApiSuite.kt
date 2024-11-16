@@ -10,7 +10,8 @@ import org.junit.platform.suite.api.Suite
     CreateTodoApiTest::class,
     GetListTodoApiTest::class,
     UpdateTodoApiTest::class,
-    DeleteTodoApiTest::class
+    DeleteTodoApiTest::class,
+    WebSocketTest::class
 )
 @TestClassOrder(OrderAnnotation::class)
 class TodoApiSuite {
