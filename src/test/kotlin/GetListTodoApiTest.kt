@@ -18,7 +18,7 @@ class GetListTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `test get todo list`() {
+    fun `test get todo list`() { // Positive scenario, getting limited list
         given()
             .contentType(ContentType.JSON)
             .queryParam("limit", "5")
@@ -31,7 +31,7 @@ class GetListTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `incorrect limit param`() {
+    fun `incorrect limit param`() { // Negative scenario, incorrect value for limit parameter
         given()
             .contentType(ContentType.JSON)
             .queryParam("limit", "")
@@ -43,7 +43,7 @@ class GetListTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `incorrect offset param`() {
+    fun `incorrect offset param`() { // Negative scenario, incorrect value for offset parameter
         given()
             .contentType(ContentType.JSON)
             .queryParam("limit", "1")

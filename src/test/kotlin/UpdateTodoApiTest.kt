@@ -18,7 +18,7 @@ class UpdateTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `update todo`() {
+    fun `update todo`() { // Positive scenario for updating basic entity
         val updatedText = "Test Completed"
 
         val requestBody = """{
@@ -51,9 +51,7 @@ class UpdateTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `incorrect update todo`() {
-        val incorrectId = 0
-
+    fun `incorrect update todo`() { // Negative scenario, update nonexistent entity
         val requestBody = """{
             "id": ${TestData.uniqId},
             "text": "${TestData.randomString}",
@@ -62,7 +60,7 @@ class UpdateTodoApiTest: BaseApiTest() {
 
         given()
             .contentType(ContentType.JSON)
-            .pathParam("id", "$incorrectId")
+            .pathParam("id", "${TestData.NONEXISTENTID}")
             .body(requestBody)
             .put("/todos/{id}")
             .then()

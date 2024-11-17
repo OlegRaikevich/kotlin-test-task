@@ -26,7 +26,7 @@ class WebSocketTest: BaseApiTest() {
         val latch = CountDownLatch(1)
         var messageReceived: String? = null
 
-        val listener = object : WebSocketListener() {
+        val listener = object : WebSocketListener() { // override event handlers for
 
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 println("Connection opened")

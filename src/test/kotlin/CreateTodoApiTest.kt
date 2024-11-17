@@ -9,7 +9,7 @@ import org.hamcrest.Matchers.containsString
 class CreateTodoApiTest: BaseApiTest() {
 
     @Test
-    fun `correct create todo`() {
+    fun `correct create todo`() { // Positive scenario for creation basic entity
         val requestBody = """{
             "id": ${TestData.uniqId},
             "text": "${TestData.randomString}",
@@ -25,7 +25,7 @@ class CreateTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `duplicate id create todo`() {
+    fun `duplicate id create todo`() { // Negative scenario, create entity with existing id
         val requestBody = """{
             "id": ${TestData.uniqId},
             "text": "${TestData.randomString}",
@@ -41,12 +41,10 @@ class CreateTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `incorrect id create todo`() {
-        val randomNumber = (1..100).random()
-
+    fun `incorrect text create todo`() { // Negative scenario, create entity with incorrect type for text field
         val requestBody = """{
             "id": ${TestData.uniqId},
-            "text": $randomNumber,
+            "text": ${TestData.numberData},
             "completed": false
         }"""
 
@@ -60,7 +58,7 @@ class CreateTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `empty body create todo`() {
+    fun `empty body create todo`() { // Negative scenario, create entity with empty body
         val requestBody = """"""
 
         given()

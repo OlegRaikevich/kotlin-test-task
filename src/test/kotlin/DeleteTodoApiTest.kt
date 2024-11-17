@@ -20,7 +20,7 @@ class DeleteTodoApiTest: BaseApiTest() {
     private val encodedCredentials = Base64.getEncoder().encodeToString(credentials.toByteArray())
 
     @Test
-    fun `correct delete todo`() {
+    fun `correct delete todo`() { // Positive scenario for deleting basic entity
         given()
 //            .auth().basic("admin", "admin")
             .header("Authorization", "Basic $encodedCredentials")
@@ -44,7 +44,7 @@ class DeleteTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `delete nonexistent todo`() {
+    fun `delete nonexistent todo`() { // Negative scenario, deleting nonexistent entity
         given()
             .header("Authorization", "Basic $encodedCredentials")
             .contentType(ContentType.JSON)
@@ -55,7 +55,7 @@ class DeleteTodoApiTest: BaseApiTest() {
     }
 
     @Test
-    fun `incorrect authorization`() {
+    fun `incorrect authorization`() { // Negative scenario, deleting without authorization
         given()
             .contentType(ContentType.JSON)
             .pathParam("id", "${TestData.uniqId}")

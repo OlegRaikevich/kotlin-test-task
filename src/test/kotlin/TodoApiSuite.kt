@@ -13,6 +13,6 @@ import org.junit.platform.suite.api.Suite
     DeleteTodoApiTest::class,
     WebSocketTest::class
 )
-@TestClassOrder(OrderAnnotation::class)
+
 class TodoApiSuite {
 }
