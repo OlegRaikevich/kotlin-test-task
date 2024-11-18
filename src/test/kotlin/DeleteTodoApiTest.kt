@@ -9,10 +9,12 @@ import java.util.Base64
 
 class DeleteTodoApiTest: BaseApiTest() {
     companion object {
+        lateinit var testTodoData: Map<String, Any>
+
         @JvmStatic
         @BeforeAll
         fun setupTestData() {
-            TestData.generateUniqEntity()
+            testTodoData = TestData.generateUniqueEntity()
         }
     }
 
@@ -21,11 +23,11 @@ class DeleteTodoApiTest: BaseApiTest() {
 
     @Test
     fun `correct delete todo`() { // Positive scenario for deleting basic entity
+        val uniqueId = testTodoData["id"]
         given()
-//            .auth().basic("admin", "admin")
             .header("Authorization", "Basic $encodedCredentials")
             .contentType(ContentType.JSON)
-            .pathParam("id", "${TestData.uniqId}")
+            .pathParam("id", "$uniqueId")
             .delete("/todos/{id}")
             .then()
             .statusCode(204)
@@ -39,7 +41,7 @@ class DeleteTodoApiTest: BaseApiTest() {
             .jsonPath()
             .getList("", Map::class.java)
 
-        val deletedTodoExists = todos.any { it["id"] == TestData.uniqId }
+        val deletedTodoExists = todos.any { it["id"] == uniqueId }
         assertFalse(deletedTodoExists)
     }
 
@@ -56,9 +58,10 @@ class DeleteTodoApiTest: BaseApiTest() {
 
     @Test
     fun `incorrect authorization`() { // Negative scenario, deleting without authorization
+        val uniqueId = testTodoData["id"]
         given()
             .contentType(ContentType.JSON)
-            .pathParam("id", "${TestData.uniqId}")
+            .pathParam("id", "$uniqueId")
             .delete("/todos/{id}")
             .then()
             .statusCode(401)

@@ -2,7 +2,6 @@ package todo.api
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
@@ -10,26 +9,29 @@ import org.junit.jupiter.api.Test
 
 class UpdateTodoApiTest: BaseApiTest() {
     companion object {
+        lateinit var testTodoData: Map<String, Any>
+
         @JvmStatic
         @BeforeAll
         fun setupTestData() {
-            TestData.generateUniqEntity()
+            testTodoData = TestData.generateUniqueEntity()
         }
     }
 
     @Test
     fun `update todo`() { // Positive scenario for updating basic entity
+        val uniqueId = testTodoData["id"]
         val updatedText = "Test Completed"
 
         val requestBody = """{
-            "id": ${TestData.uniqId},
+            "id": $uniqueId,
             "text": "$updatedText",
             "completed": true
         }"""
 
         given()
             .contentType(ContentType.JSON)
-            .pathParam("id", "${TestData.uniqId}")
+            .pathParam("id", "$uniqueId")
             .body(requestBody)
             .put("/todos/{id}")
             .then()
@@ -44,7 +46,7 @@ class UpdateTodoApiTest: BaseApiTest() {
             .jsonPath()
             .getList("", Map::class.java)
 
-        val updatedTodo = todos.find { it["id"] == TestData.uniqId }
+        val updatedTodo = todos.find { it["id"] == uniqueId }
         assertTrue(updatedTodo != null)
         assertTrue(updatedTodo!!["completed"] == true)
         assertEquals(updatedText, updatedTodo["text"])
@@ -52,9 +54,11 @@ class UpdateTodoApiTest: BaseApiTest() {
 
     @Test
     fun `incorrect update todo`() { // Negative scenario, update nonexistent entity
+        val uniqueId = testTodoData["id"]
+        val randomString = testTodoData["text"]
         val requestBody = """{
-            "id": ${TestData.uniqId},
-            "text": "${TestData.randomString}",
+            "id": $uniqueId,
+            "text": "$randomString",
             "completed": true
         }"""
 

@@ -4,27 +4,31 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 
 object TestData {
-    const val numberData = 0 // numerical data for negative testcases
+    const val NUMBERDATA = 0 // numerical data for negative testcases
     const val NONEXISTENTID = 0 // id for nonexistent entity in app, for negative testcases
 
-    val uniqId: Int = (100..999).random()
+    private val usedIds = mutableSetOf<Int>()
 
-    val randomString: String = (1..20)
-        .map { ('a'..'z').random() }
-        .joinToString("")
-
-    private fun generateRandomId(): Int {
+    fun generateRandomId(): Int {
         var randomUniqId: Int
         do {
             randomUniqId = (100..999).random()
-        } while (randomUniqId == uniqId)
-
+        } while (usedIds.contains(randomUniqId))
+        usedIds.add(randomUniqId)
         return randomUniqId
     }
 
-    fun generateUniqEntity() {
+    fun generateRandomString(): String {
+        return (1..20)
+            .map { ('a'..'z').random() }
+            .joinToString("")
+    }
+
+    fun generateUniqueEntity(): Map<String, Any> {
+        val uniqueId = generateRandomId()
+        val randomString = generateRandomString()
         val requestBody = """{
-            "id": $uniqId,
+            "id": $uniqueId,
             "text": "$randomString",
             "completed": false
             }"""
@@ -33,34 +37,13 @@ object TestData {
             .contentType(ContentType.JSON)
             .body(requestBody)
             .post("/todos")
+
+        return mapOf("id" to uniqueId, "text" to randomString)
     }
 
     fun generateEntities(todoQuantity: Int) { // create specified number of basic entities
-
         repeat(todoQuantity) {
-            val requestBody = """{
-            "id": ${generateRandomId()},
-            "text": "$randomString",
-            "completed": false
-            }"""
-
-            given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .post("/todos")
+            generateUniqueEntity()
         }
-    }
-
-    fun createTodo() { // create basic entity
-        val requestBody = """{
-            "id": ${TestData.uniqId},
-            "text": "${TestData.randomString}",
-            "completed": false
-        }"""
-
-        given()
-            .contentType(ContentType.JSON)
-            .body(requestBody)
-            .post("/todos")
     }
 }

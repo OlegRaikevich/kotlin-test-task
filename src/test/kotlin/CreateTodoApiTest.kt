@@ -4,15 +4,27 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Test
 import org.hamcrest.Matchers.containsString
+import org.junit.jupiter.api.BeforeAll
 
 
 class CreateTodoApiTest: BaseApiTest() {
+    companion object {
+        var uniqueId: Int = 0
+        lateinit var randomString: String
+
+        @JvmStatic
+        @BeforeAll
+        fun setupTestData() {
+            uniqueId = TestData.generateRandomId()
+            randomString = TestData.generateRandomString()
+        }
+    }
 
     @Test
     fun `correct create todo`() { // Positive scenario for creation basic entity
         val requestBody = """{
-            "id": ${TestData.uniqId},
-            "text": "${TestData.randomString}",
+            "id": $uniqueId,
+            "text": "$randomString",
             "completed": false
         }"""
 
@@ -27,8 +39,8 @@ class CreateTodoApiTest: BaseApiTest() {
     @Test
     fun `duplicate id create todo`() { // Negative scenario, create entity with existing id
         val requestBody = """{
-            "id": ${TestData.uniqId},
-            "text": "${TestData.randomString}",
+            "id": $uniqueId,
+            "text": "$randomString",
             "completed": false
         }"""
 
@@ -43,8 +55,8 @@ class CreateTodoApiTest: BaseApiTest() {
     @Test
     fun `incorrect text create todo`() { // Negative scenario, create entity with incorrect type for text field
         val requestBody = """{
-            "id": ${TestData.uniqId},
-            "text": ${TestData.numberData},
+            "id": $uniqueId,
+            "text": ${TestData.NUMBERDATA},
             "completed": false
         }"""
 

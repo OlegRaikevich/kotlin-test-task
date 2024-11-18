@@ -6,16 +6,28 @@ import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import com.google.gson.JsonParser
+import io.restassured.RestAssured.given
+import io.restassured.http.ContentType
 
 class WebSocketTest: BaseApiTest() {
 
     private val client = OkHttpClient()
+
+    private val uniqueId = TestData.generateRandomId()
+    private val randomString = TestData.generateRandomString()
+
+    private val requestBody = """{
+            "id": $uniqueId,
+            "text": "$randomString",
+            "completed": false
+        }"""
+
     private var expectedMassage = """
         {
             "data": {
                 "completed": false,
-                "id": ${TestData.uniqId},
-                "text": "${TestData.randomString}"
+                "id": $uniqueId,
+                "text": "$randomString"
             },
             "type": "new_todo"
         }
@@ -53,7 +65,12 @@ class WebSocketTest: BaseApiTest() {
 
         latch.await(5, TimeUnit.SECONDS)
 
-        TestData.createTodo()
+        given()
+            .contentType(ContentType.JSON)
+            .body(requestBody)
+            .post("/todos")
+            .then()
+            .statusCode(201)
 
         webSocket.close(1000, "Test completed")
         client.dispatcher.executorService.shutdown()
