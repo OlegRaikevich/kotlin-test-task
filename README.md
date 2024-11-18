@@ -9,7 +9,7 @@ This project contains automated tests written in Kotlin to verify the functional
 - [Installation](#installation)
 - [Running Tests](#running-tests)
 - [Project Structure](#project-structure)
-- [Tests and Their Goals](#tests-and-their-goals)
+- [Test cases](#test-cases)
 
 ## Description
 
