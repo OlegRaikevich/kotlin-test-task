@@ -8,6 +8,8 @@ This project contains automated tests written in Kotlin to verify the functional
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Running Tests](#running-tests)
+- [Running Load Tests](#running-load-tests)
+- [Example Report Output](#example-report-output)
 - [Project Structure](#project-structure)
 - [Test cases](#test-cases)
 
@@ -46,24 +48,56 @@ To run tests with detailed output:
 ./gradlew test --info
 ```
 
+### Running Load Tests
+
+A separate Gradle task `loadTest` is configured specifically for load testing, which runs the load test located in the `performance` package. This test measures the performance of the `POST /todos` endpoint under simulated load conditions.
+
+To run the load test only:
+```bash
+./gradlew loadTest
+```
+
+After executing the load test, a performance summary report will be generated and saved in a file named `load_test_report.txt` in the project's root directory. This report includes metrics such as the total number of requests, success rate, failure rate, and response times (average, minimum, and maximum).
+
+### Example Report Output
+
+The `load_test_report.txt` will contain a summary similar to the following:
+
+```
+Performance summary for POST /todos:
+Total requests: 100
+Successful requests: 95 (95.0%)
+Failed requests: 5 (5.0%)
+Average response time: 120 ms
+Min response time: 80 ms
+Max response time: 300 ms
+```
+
+This file can be reviewed after each load test run to analyze performance metrics.
+
+
 ## Project Structure
 
 ```plaintext
 kotlin-test-task/
 ├── src/
-│   └── test/                        # Project tests
-│       └── kotlin/                  # Tests written in Kotlin
-│           ├── BaseApiTest          # Parent class for all test classes, contains common setup and helper methods
-│           ├── CreateTodoTest       # Tests the creation of TODO items via POST /todos endpoint
-│           ├── GetTodoTest          # Tests fetching TODO items, verifies response structure and data accuracy
-│           ├── UpdateTodoTest       # Tests updating existing TODO items via PUT /todos/{id} endpoint
-│           ├── DeleteTodoTest       # Tests deleting TODO items via DELETE /todos/{id} endpoint and ensures removal
-│           ├── WebSocketTest        # Tests real-time notifications via WebSocket connection on new TODO creation
-├── build.gradle.kts                 # Gradle configuration file for Kotlin, includes dependencies and project settings
-├── settings.gradle.kts              # Gradle project settings, links modules and defines root project name
-├── gradlew                          # Gradle Wrapper script (Unix), runs Gradle tasks without installing Gradle globally
-├── gradlew.bat                      # Gradle Wrapper script (Windows)
-└── README.md                        # Project documentation file, includes project overview, setup, and usage instructions
+│   └── test/                            # Project tests
+│       └── kotlin/                      # Tests written in Kotlin
+│           ├── api/                     # Package for API tests
+│           │   ├── BaseApiTest          # Parent class for all test classes, contains common setup and helper methods
+│           │   ├── CreateTodoApiTest    # Tests the creation of TODO items via POST /todos endpoint
+│           │   ├── GetListTodoApiTest   # Tests fetching TODO items, verifies response structure and data accuracy
+│           │   ├── UpdateTodoApiTest    # Tests updating existing TODO items via PUT /todos/{id} endpoint
+│           │   ├── DeleteTodoApiTest    # Tests deleting TODO items via DELETE /todos/{id} endpoint and ensures removal
+│           │   ├── WebSocketTest        # Tests real-time notifications via WebSocket connection on new TODO creation
+│           │   └── TestData             # Contains test data generation utilities and constants
+│           └── performance/             # Package for performance and load testing
+│               └── PostTodosLoadTest    # Load test for POST /todos endpoint, measures response times under load
+├── build.gradle.kts                     # Gradle configuration file for Kotlin, includes dependencies and project settings
+├── settings.gradle.kts                  # Gradle project settings, links modules and defines root project name
+├── gradlew                              # Gradle Wrapper script (Unix), runs Gradle tasks without installing Gradle globally
+├── gradlew.bat                          # Gradle Wrapper script (Windows)
+└── README.md                            # Project documentation file, includes project overview, setup, and usage instructions
 ```
 
 ## Test cases
