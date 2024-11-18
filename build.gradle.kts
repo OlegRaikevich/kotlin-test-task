@@ -29,4 +29,11 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    exclude("**/performance/**")
+}
+
+tasks.register<Test>("loadTest") {
+    description = "Runs the load tests."
+    useJUnitPlatform()
+    include("**/performance/**")
 }

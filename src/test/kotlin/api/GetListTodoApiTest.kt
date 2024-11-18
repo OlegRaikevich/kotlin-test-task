@@ -1,4 +1,4 @@
-package todo.api
+package todo.api.api
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
